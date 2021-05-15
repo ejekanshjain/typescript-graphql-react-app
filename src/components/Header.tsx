@@ -20,6 +20,9 @@ export const Header: FC = () => {
       <div>
         <Link to="/profile">Profile</Link>
       </div>
+      <div>
+        <Link to="/activeSessions">Active Sessions</Link>
+      </div>
       Status: {data && data.me ? data.me.id : 'Not logged in'}
       <div>
         <button

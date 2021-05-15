@@ -130,6 +130,17 @@ export type User = {
   updatedAt: Scalars['DateTime'];
 };
 
+export type ActiveSessionsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ActiveSessionsQuery = (
+  { __typename?: 'Query' }
+  & { activeSessions?: Maybe<Array<(
+    { __typename?: 'RefreshToken' }
+    & Pick<RefreshToken, 'id' | 'userAgent' | 'createdAt' | 'updatedAt'>
+  )>> }
+);
+
 export type GoogleSignInMutationVariables = Exact<{
   idToken: Scalars['String'];
 }>;
@@ -162,6 +173,16 @@ export type MeQuery = (
   )> }
 );
 
+export type RemoveSessionMutationVariables = Exact<{
+  sessionId: Scalars['String'];
+}>;
+
+
+export type RemoveSessionMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<Mutation, 'removeSession'>
+);
+
 export type SignInMutationVariables = Exact<{
   email: Scalars['String'];
   password: Scalars['String'];
@@ -185,6 +206,43 @@ export type SignOutMutation = (
 );
 
 
+export const ActiveSessionsDocument = gql`
+    query ActiveSessions {
+  activeSessions {
+    id
+    userAgent
+    createdAt
+    updatedAt
+  }
+}
+    `;
+
+/**
+ * __useActiveSessionsQuery__
+ *
+ * To run a query within a React component, call `useActiveSessionsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useActiveSessionsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useActiveSessionsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useActiveSessionsQuery(baseOptions?: Apollo.QueryHookOptions<ActiveSessionsQuery, ActiveSessionsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ActiveSessionsQuery, ActiveSessionsQueryVariables>(ActiveSessionsDocument, options);
+      }
+export function useActiveSessionsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ActiveSessionsQuery, ActiveSessionsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ActiveSessionsQuery, ActiveSessionsQueryVariables>(ActiveSessionsDocument, options);
+        }
+export type ActiveSessionsQueryHookResult = ReturnType<typeof useActiveSessionsQuery>;
+export type ActiveSessionsLazyQueryHookResult = ReturnType<typeof useActiveSessionsLazyQuery>;
+export type ActiveSessionsQueryResult = Apollo.QueryResult<ActiveSessionsQuery, ActiveSessionsQueryVariables>;
 export const GoogleSignInDocument = gql`
     mutation GoogleSignIn($idToken: String!) {
   googleSignIn(idToken: $idToken) {
@@ -302,6 +360,37 @@ export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
+export const RemoveSessionDocument = gql`
+    mutation RemoveSession($sessionId: String!) {
+  removeSession(sessionId: $sessionId)
+}
+    `;
+export type RemoveSessionMutationFn = Apollo.MutationFunction<RemoveSessionMutation, RemoveSessionMutationVariables>;
+
+/**
+ * __useRemoveSessionMutation__
+ *
+ * To run a mutation, you first call `useRemoveSessionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveSessionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeSessionMutation, { data, loading, error }] = useRemoveSessionMutation({
+ *   variables: {
+ *      sessionId: // value for 'sessionId'
+ *   },
+ * });
+ */
+export function useRemoveSessionMutation(baseOptions?: Apollo.MutationHookOptions<RemoveSessionMutation, RemoveSessionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RemoveSessionMutation, RemoveSessionMutationVariables>(RemoveSessionDocument, options);
+      }
+export type RemoveSessionMutationHookResult = ReturnType<typeof useRemoveSessionMutation>;
+export type RemoveSessionMutationResult = Apollo.MutationResult<RemoveSessionMutation>;
+export type RemoveSessionMutationOptions = Apollo.BaseMutationOptions<RemoveSessionMutation, RemoveSessionMutationVariables>;
 export const SignInDocument = gql`
     mutation SignIn($email: String!, $password: String!) {
   signIn(data: {email: $email, password: $password}) {

@@ -1,6 +1,10 @@
 import { ApolloClient, createHttpLink, InMemoryCache } from '@apollo/client'
 import { setContext } from '@apollo/client/link/context'
-import { getAccessToken, getAccessTokenExpiry, setAuthState } from './auth/authState'
+import {
+  getAccessToken,
+  getAccessTokenExpiry,
+  setAuthState
+} from './auth/authState'
 import { fetchRefreshToken } from './auth/fetchRefreshToken'
 
 const authLink = setContext((_, { headers }) => ({
@@ -29,12 +33,8 @@ const httpLink = createHttpLink({
             json.data.refreshToken &&
             json.data.refreshToken.accessToken
           ) {
-            const {
-              userId,
-              accessToken,
-              issuedAt,
-              expiresAt
-            } = json.data.refreshToken
+            const { userId, accessToken, issuedAt, expiresAt } =
+              json.data.refreshToken
             setAuthState(userId, accessToken, issuedAt, expiresAt)
             options.headers.authorization = accessToken
           }
