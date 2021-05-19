@@ -82,7 +82,7 @@ export type Query = {
 export type RefreshToken = {
   __typename?: 'RefreshToken';
   id: Scalars['ID'];
-  userId: Scalars['ID'];
+  userId: Scalars['String'];
   userAgent: Scalars['String'];
   isActive: Scalars['Boolean'];
   createdAt: Scalars['DateTime'];

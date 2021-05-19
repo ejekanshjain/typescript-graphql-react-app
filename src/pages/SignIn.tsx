@@ -11,8 +11,12 @@ export const SignIn: FC = () => {
   const { setAppState } = useContext(AppStateContext) as any
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  const [signIn] = useSignInMutation()
-  const [googleSignIn] = useGoogleSignInMutation()
+  const [signIn] = useSignInMutation({
+    fetchPolicy: 'no-cache'
+  })
+  const [googleSignIn] = useGoogleSignInMutation({
+    fetchPolicy: 'no-cache'
+  })
   const handleSignIn = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     const response = await signIn({

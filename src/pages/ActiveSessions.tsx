@@ -1,5 +1,7 @@
 import { FC } from 'react'
 import {
+  ActiveSessionsDocument,
+  ActiveSessionsQuery,
   useActiveSessionsQuery,
   useRemoveSessionMutation
 } from '../generated/graphql'
@@ -12,13 +14,19 @@ export const ActiveSessions: FC = () => {
   const deleteSession = async (sessionId: string) => {
     await removeSession({
       variables: { sessionId },
-      update: cache => {
-        cache.modify({
-          fields: {
-            activeSessions: (existing: any[], { readField }) =>
-              existing.filter(
-                sessionRef => sessionId !== readField('id', sessionRef)
-              )
+      update: store => {
+        const prevActiveSessions = store.readQuery<ActiveSessionsQuery>({
+          query: ActiveSessionsDocument
+        })
+        store.writeQuery<ActiveSessionsQuery>({
+          query: ActiveSessionsDocument,
+          data: {
+            activeSessions:
+              prevActiveSessions && prevActiveSessions.activeSessions
+                ? prevActiveSessions.activeSessions.filter(
+                    s => s.id !== sessionId
+                  )
+                : []
           }
         })
       }
