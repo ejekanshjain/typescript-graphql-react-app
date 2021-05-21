@@ -1,6 +1,6 @@
-import { FC, useContext } from 'react'
+import { FC } from 'react'
 import { BrowserRouter, Route, Switch } from 'react-router-dom'
-import { AppStateContext } from '../context/AppStateContext'
+import { useAppState } from '../AppState'
 import { Header } from './Header'
 import { Home } from '../pages/Home'
 import { SignIn } from '../pages/SignIn'
@@ -8,13 +8,14 @@ import { Profile } from '../pages/Profile'
 import { ActiveSessions } from '../pages/ActiveSessions'
 
 export const Routes: FC = () => {
-  const { appState } = useContext(AppStateContext) as any
+  const { appState } = useAppState()
   return (
     <BrowserRouter>
       {appState.signedIn && <Header />}
       {!appState.signedIn ? (
         <Switch>
           <Route path="/" component={SignIn} exact />
+          <div>Sign In</div>
         </Switch>
       ) : (
         <Switch>

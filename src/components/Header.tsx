@@ -1,12 +1,10 @@
-import { FC, useContext } from 'react'
+import { FC } from 'react'
 import { Link } from 'react-router-dom'
-import { setAuthState } from '../auth/authState'
 import { useMeQuery, useSignOutMutation } from '../generated/graphql'
-import { AppStateContext } from '../context/AppStateContext'
-import { defaultAppState } from '../defaultAppState'
+import { defaultAppState, useAppState } from '../AppState'
 
 export const Header: FC = () => {
-  const { setAppState } = useContext(AppStateContext) as any
+  const { setAppState } = useAppState()
   const { data } = useMeQuery()
   const [signOut] = useSignOutMutation()
   return (
@@ -29,7 +27,6 @@ export const Header: FC = () => {
           onClick={async () => {
             await signOut()
             setAppState({ ...defaultAppState })
-            setAuthState('', '', 0, 0)
             window.location.href = '/'
           }}
         >

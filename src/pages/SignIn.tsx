@@ -1,14 +1,13 @@
-import { FC, FormEvent, useState, useContext } from 'react'
+import { FC, FormEvent, useState } from 'react'
 import GoogleLogin from 'react-google-login'
-import { setAuthState } from '../auth/authState'
 import {
   useGoogleSignInMutation,
   useSignInMutation
 } from '../generated/graphql'
-import { AppStateContext } from '../context/AppStateContext'
+import { useAppState } from '../AppState'
 
 export const SignIn: FC = () => {
-  const { setAppState } = useContext(AppStateContext) as any
+  const { setAppState, setAccessToken, setAccessTokenExpiry } = useAppState()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [signIn] = useSignInMutation({
@@ -35,7 +34,6 @@ export const SignIn: FC = () => {
         lastName,
         profileImage,
         accessToken,
-        issuedAt,
         expiresAt
       } = response.data.signIn
       setEmail('')
@@ -48,7 +46,8 @@ export const SignIn: FC = () => {
         lastName,
         profileImage: profileImage || ''
       })
-      setAuthState(userId, accessToken, issuedAt, expiresAt)
+      setAccessToken(accessToken)
+      setAccessTokenExpiry(expiresAt * 1000)
     }
   }
   const handleGoogleResponse = async (res: any) => {
@@ -69,7 +68,6 @@ export const SignIn: FC = () => {
         lastName,
         profileImage,
         accessToken,
-        issuedAt,
         expiresAt
       } = response.data.googleSignIn
       setEmail('')
@@ -82,7 +80,8 @@ export const SignIn: FC = () => {
         lastName,
         profileImage: profileImage || ''
       })
-      setAuthState(userId, accessToken, issuedAt, expiresAt)
+      setAccessToken(accessToken)
+      setAccessTokenExpiry(expiresAt * 1000)
     }
   }
   return (
